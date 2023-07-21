@@ -28,8 +28,6 @@ namespace Web {
 
 static JS::GCPtr<DOM::Node> dom_node_for_event_dispatch(Painting::Paintable& paintable)
 {
-    if (auto node = paintable.mouse_event_target())
-        return node;
     if (auto node = paintable.dom_node())
         return node;
     if (auto* layout_parent = paintable.layout_node().parent())
@@ -452,16 +450,22 @@ bool EventHandler::handle_mousemove(CSSPixelPoint position, unsigned buttons, un
     const HTML::HTMLAnchorElement* hovered_link_element = nullptr;
     if (paintable) {
         if (paintable->wants_mouse_events()) {
-            document.set_hovered_node(paintable->dom_node());
-            if (paintable->handle_mousemove({}, position, buttons, modifiers) == Painting::Paintable::DispatchEventOfSameName::No)
+            if (paintable->handle_mousemove({}, position, buttons, modifiers) == Painting::Paintable::DispatchEventOfSameName::No) {
+                dbgln("setting hovered node to {}: {}", paintable->dom_node()->debug_description(), paintable->dom_node()->text_content());
+                document.set_hovered_node(paintable->dom_node());
                 return false;
+            }
 
             // FIXME: It feels a bit aggressive to always update the cursor like this.
             if (auto* page = m_browsing_context->page())
                 page->client().page_did_request_cursor_change(Gfx::StandardCursor::None);
         }
 
+        if (paintable->dom_node()) {
+            dbgln("paintable node is {}: {}", paintable->dom_node()->debug_description(), paintable->dom_node()->text_content());
+        }
         auto node = dom_node_for_event_dispatch(*paintable);
+        dbgln("node is {}: {}", node->debug_description(), node->text_content());
 
         if (node && is<HTML::HTMLIFrameElement>(*node)) {
             if (auto* nested_browsing_context = static_cast<HTML::HTMLIFrameElement&>(*node).nested_browsing_context())

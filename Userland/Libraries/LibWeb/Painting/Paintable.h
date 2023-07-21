@@ -122,12 +122,10 @@ public:
         No,
     };
     // When these methods return true, the DOM event with the same name will be
-    // dispatch at the mouse_event_target if it returns a valid DOM::Node, or
-    // the layout node's associated DOM node if it doesn't.
+    // dispatched to the layout node's associated DOM node.
     virtual DispatchEventOfSameName handle_mousedown(Badge<EventHandler>, CSSPixelPoint, unsigned button, unsigned modifiers);
     virtual DispatchEventOfSameName handle_mouseup(Badge<EventHandler>, CSSPixelPoint, unsigned button, unsigned modifiers);
     virtual DispatchEventOfSameName handle_mousemove(Badge<EventHandler>, CSSPixelPoint, unsigned buttons, unsigned modifiers);
-    virtual DOM::Node* mouse_event_target() const { return nullptr; }
 
     virtual bool handle_mousewheel(Badge<EventHandler>, CSSPixelPoint, unsigned buttons, unsigned modifiers, int wheel_delta_x, int wheel_delta_y);
 

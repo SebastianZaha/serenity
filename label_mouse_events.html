@@ -1,0 +1,29 @@
+<style>
+    * { border: 1px solid black;}
+    /* No margin for easier to use mouse coordinates. */
+    body { margin: 0; }
+
+    div, label, button { display:block; height: 20px; width: 100%; }
+
+</style>
+<div id="div1">A neutral element to serve as baseline.</div>
+<label id="label1">The label1 text, does not have a target</label>
+<label id="label2" for="input1">The second label text targets #input1</label>
+<button id="input1">Button</button>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        document.addEventListener("mousedown", (event) => {
+            console.log(event.target, event);
+        });
+
+        // Specify event coordinates in pixels and not relative to element
+        // positions and sizes, in case there are bugs with layout and js-facing
+        // size and position values (of which there are a few :^) ).
+        document.dispatchEvent(new MouseEvent("mousedown", {
+            clientX: 10,
+            clientY: 10
+        }));
+    });
+</script>

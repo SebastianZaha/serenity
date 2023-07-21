@@ -1110,6 +1110,7 @@ static Node* find_common_ancestor(Node* a, Node* b)
 
 void Document::set_hovered_node(Node* node)
 {
+    dbgln("setting hovered node to {}: {}", node->debug_description(), node->text_content());
     if (m_hovered_node.ptr() == node)
         return;
 
