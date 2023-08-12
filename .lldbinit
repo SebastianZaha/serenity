@@ -1,0 +1,22 @@
+# To automatically source these pretty printing helpers when lldb is opened in the project root
+# one needs to add the following setting to their ~/.lldbinit:
+#
+#     settings set target.load-cwd-lldbinit false
+# 
+# Some IDEs (like clion) do automatically source this file. For other IDE launcher setups this 
+# file should be manually sourced in the launch configuration. For example for vscode or nvim 
+# using codelldb it would look something like:
+#
+#     "lldb.launch.initCommands": ["command source ${workspaceFolder}/.lldbinit"]   
+#
+
+
+type summary add -w serenity AK::StringImpl       -s "${var.m_inline_buffer%s}"
+type summary add -w serenity AK::StringView       -s "${var.m_characters%s}"
+type summary add -w serenity AK::DeprecatedString -s "${var.m_impl.m_ptr%s}"
+type summary add -w serenity AK::Error            -s "Code: ${var.m_code}, Message: ${var.m_string_literal}, Syscall: ${var.m_syscall}"
+type summary add -w serenity -e -x AK::Vector<    -s "size: ${var.m_size}, capacity: ${var.m_capacity}" 
+
+type category enable serenity
+
+command script import Meta/serenity_lldb.py
